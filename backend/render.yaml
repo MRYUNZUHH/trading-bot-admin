@@ -1,0 +1,13 @@
+﻿services:
+  - type: web
+    name: trading-bot-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./trading_bot_admin.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: BACKEND_CORS_ORIGINS
+        value: '["https://your-frontend.vercel.app","http://localhost:5173"]'
