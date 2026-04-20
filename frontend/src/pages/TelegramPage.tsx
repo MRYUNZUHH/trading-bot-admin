@@ -1,4 +1,4 @@
-﻿import { Send, Radio, Zap, Settings, Activity } from 'lucide-react'
+﻿import { Send, Radio, Zap, Activity } from 'lucide-react'
 
 export default function TelegramPage() {
   const channels = [

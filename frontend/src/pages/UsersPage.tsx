@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { Search, Filter, MoreVertical, Mail, MessageCircle, Edit, Trash2, UserPlus } from 'lucide-react'
+import { Search, Filter, MoreVertical, Mail, MessageCircle, Edit, UserPlus } from 'lucide-react'
 
 export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -47,17 +47,13 @@ export default function UsersPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
-              placeholder="Search users by name, username, or Telegram ID..."
+              placeholder="Search users..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
             />
           </div>
-          <select 
-            value={selectedPlan}
-            onChange={(e) => setSelectedPlan(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
+          <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)} className="px-4 py-2 border border-gray-300 rounded-lg">
             <option value="all">All Plans</option>
             <option value="pro">Pro</option>
             <option value="premium">Premium</option>
@@ -75,13 +71,13 @@ export default function UsersPage() {
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telegram ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Active</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Telegram ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plan</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Joined</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Active</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">

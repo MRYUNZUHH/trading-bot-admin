@@ -1,4 +1,4 @@
-﻿import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts'
+﻿import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts'
 
 interface EquityChartProps {
   data?: Array<{ date: string; equity: number; pnl?: number }>
@@ -34,7 +34,7 @@ export default function EquityChart({ data = mockData }: EquityChartProps) {
         <YAxis stroke="#6b7280" fontSize={12} />
         <Tooltip 
           contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-          formatter={(value: number) => [`$${value.toLocaleString()}`, 'Equity']}
+          formatter={(value: any) => [`$${Number(value).toLocaleString()}`, 'Equity']}
         />
         <Area 
           type="monotone" 

@@ -24,13 +24,13 @@ export default function WinLossChart({ wins = 845, losses = 389 }: WinLossChartP
           outerRadius={90}
           paddingAngle={2}
           dataKey="value"
-          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+          label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(1)}%`}
         >
-          {data.map((entry, index) => (
+          {data.map((_, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip formatter={(value: number) => value.toLocaleString()} />
+        <Tooltip formatter={(value: any) => Number(value).toLocaleString()} />
       </PieChart>
     </ResponsiveContainer>
   )
