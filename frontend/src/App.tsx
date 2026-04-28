@@ -47,7 +47,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken')
-    window.location.href = '/#/login'
+    window.location.hash = '#/login'
   }
 
   return (
@@ -121,8 +121,10 @@ function Login() {
     try {
       const response = await fetch('https://trading-bot-admin.onrender.com/api/v1/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
       const data = await response.json()
-      if (response.ok) { localStorage.setItem('accessToken', data.access_token); navigate('/dashboard', { replace: true }) }
-      else { alert('Login failed') }
+      if (response.ok) { 
+        localStorage.setItem('accessToken', data.access_token)
+        navigate('/dashboard', { replace: true }) 
+      } else { alert('Login failed') }
     } catch (error) { alert('Cannot connect to backend') }
     finally { setLoading(false) }
   }
