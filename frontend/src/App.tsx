@@ -47,7 +47,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken')
-    window.location.hash = '#/login'
+    window.location.href = '/#/login'
   }
 
   return (
@@ -178,3 +178,5 @@ function App() {
 }
 
 export default App
+
+
