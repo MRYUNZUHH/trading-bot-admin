@@ -17,6 +17,9 @@ import TelegramPage from './pages/TelegramPage'
 import ChannelsPage from './pages/ChannelsPage'
 import AuditPage from './pages/AuditPage'
 import SettingsPage from './pages/SettingsPage'
+import EquityChart from './components/dashboard/EquityChart'
+import WinLossChart from './components/dashboard/WinLossChart'
+import SignalsChart from './components/dashboard/SignalsChart'
 
 const isAuthenticated = () => localStorage.getItem('accessToken') !== null
 
@@ -101,12 +104,174 @@ function Dashboard() {
     { title: 'Active Accounts', value: '156', icon: Wallet, color: 'purple' },
     { title: 'Expiring Licenses', value: '23', icon: AlertTriangle, trend: -2.1, color: 'red' },
   ]
+
+  const activeTrades = [
+    { id: 1, symbol: 'EUR/USD', type: 'BUY', entry: 1.0950, current: 1.0975, pnl: 250.00, pnlPercent: 2.3, openTime: '2 hours ago' },
+    { id: 2, symbol: 'GBP/USD', type: 'BUY', entry: 1.2650, current: 1.2630, pnl: -200.00, pnlPercent: -0.16, openTime: '1 hour ago' },
+    { id: 3, symbol: 'USD/JPY', type: 'BUY', entry: 145.50, current: 146.20, pnl: 700.00, pnlPercent: 0.48, openTime: '30 mins ago' },
+    { id: 4, symbol: 'BTC/USD', type: 'SELL', entry: 42500, current: 42350, pnl: 150.00, pnlPercent: 0.35, openTime: '15 mins ago' },
+  ]
+
+  const recentTrades = [
+    { symbol: 'EUR/USD', type: 'BUY', entry: 1.0950, current: 1.0975, pnl: 250.00, pnlPercent: 2.3 },
+    { symbol: 'XAU/USD', type: 'SELL', entry: 2015.50, current: 2010.25, pnl: 525.00, pnlPercent: 0.26 },
+    { symbol: 'GBP/USD', type: 'BUY', entry: 1.2650, current: 1.2630, pnl: -200.00, pnlPercent: -0.16 },
+    { symbol: 'USD/JPY', type: 'BUY', entry: 145.50, current: 146.20, pnl: 700.00, pnlPercent: 0.48 },
+  ]
+
+  const licenseAlerts = [
+    { account: 'MT5-001234', user: 'John Doe', daysLeft: 3 },
+    { account: 'MT4-005678', user: 'Sarah Smith', daysLeft: 7 },
+    { account: 'MT5-009012', user: 'Mike Johnson', daysLeft: 1 },
+  ]
+
   return (
-    <div className="flex-1 overflow-auto bg-gray-50"><div className="p-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold text-gray-900">Dashboard</h1><p className="text-gray-600 mt-1">Welcome back! Here's your trading overview.</p></div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">{stats.slice(0, 4).map((stat, index) => <StatCard key={index} {...stat} />)}</div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">{stats.slice(4, 8).map((stat, index) => <StatCard key={index} {...stat} />)}</div>
-    </div></div>
+    <div className="flex-1 overflow-auto bg-gray-50">
+      <div className="p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-600 mt-1">Welcome back! Here's your trading overview.</p>
+        </div>
+
+        {/* Stats Row 1 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          {stats.slice(0, 4).map((stat, index) => <StatCard key={index} {...stat} />)}
+        </div>
+
+        {/* Stats Row 2 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.slice(4, 8).map((stat, index) => <StatCard key={index} {...stat} />)}
+        </div>
+
+        {/* Charts and Active Trades */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Equity Curve */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Equity Curve</h2>
+            <EquityChart />
+          </div>
+
+          {/* Active Trades */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Active Trades</h2>
+            <div className="space-y-3">
+              {activeTrades.map((trade) => (
+                <div key={trade.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <div className={'w-2 h-2 rounded-full ' + (trade.type === 'BUY' ? 'bg-green-500' : 'bg-red-500')} />
+                    <div>
+                      <p className="font-medium text-gray-900">{trade.symbol}</p>
+                      <p className="text-xs text-gray-500">{trade.type} • {trade.openTime}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={'font-medium ' + (trade.pnl >= 0 ? 'text-green-600' : 'text-red-600')}>
+                      {trade.pnl >= 0 ? '+' : ''}{trade.pnl.toFixed(2)}
+                    </p>
+                    <p className={'text-xs ' + (trade.pnlPercent >= 0 ? 'text-green-600' : 'text-red-600')}>
+                      {trade.pnlPercent >= 0 ? '+' : ''}{trade.pnlPercent}%
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 text-sm font-medium">View All Trades →</button>
+          </div>
+        </div>
+
+        {/* Bottom Section: Recent Trades + Side Panels */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Trades Table */}
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Recent Trades</h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Symbol</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Entry</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Current</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">P/L</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">P/L %</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {recentTrades.map((trade, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{trade.symbol}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={'px-2 py-1 text-xs font-medium rounded ' + (trade.type === 'BUY' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')}>
+                          {trade.type}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-600">{trade.entry}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-600">{trade.current}</td>
+                      <td className={'px-6 py-4 whitespace-nowrap font-medium ' + (trade.pnl >= 0 ? 'text-green-600' : 'text-red-600')}>
+                        {trade.pnl >= 0 ? '+' : ''}{trade.pnl.toFixed(2)}
+                      </td>
+                      <td className={'px-6 py-4 whitespace-nowrap font-medium ' + (trade.pnlPercent >= 0 ? 'text-green-600' : 'text-red-600')}>
+                        {trade.pnlPercent >= 0 ? '+' : ''}{trade.pnlPercent}%
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Right Column: Telegram Status + License Alerts */}
+          <div className="space-y-6">
+            {/* Telegram Status */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Telegram Status</h2>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Connection</span>
+                  <span className="flex items-center text-green-600">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    Connected
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Active Channels</span>
+                  <span className="font-medium">3</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Daily Signals</span>
+                  <span className="font-medium">24</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Last Signal</span>
+                  <span className="font-medium">5 mins ago</span>
+                </div>
+              </div>
+            </div>
+
+            {/* License Alerts */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">License Alerts</h2>
+              <div className="space-y-2">
+                {licenseAlerts.map((alert, index) => (
+                  <div key={index} className={'p-3 rounded-lg ' + (alert.daysLeft <= 3 ? 'bg-red-50 border border-red-200' : 'bg-yellow-50 border border-yellow-200')}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-medium text-gray-900">{alert.account}</span>
+                      <span className={'text-xs font-medium ' + (alert.daysLeft <= 3 ? 'text-red-600' : 'text-yellow-600')}>
+                        {alert.daysLeft} days left
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">{alert.user}</p>
+                  </div>
+                ))}
+              </div>
+              <button className="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 text-sm font-medium">View All Licenses →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -123,7 +288,7 @@ function Login() {
       const data = await response.json()
       if (response.ok) { 
         localStorage.setItem('accessToken', data.access_token)
-        navigate('/dashboard', { replace: true }) 
+        window.location.href = '/#/dashboard'
       } else { alert('Login failed') }
     } catch (error) { alert('Cannot connect to backend') }
     finally { setLoading(false) }
@@ -178,5 +343,3 @@ function App() {
 }
 
 export default App
-
-
