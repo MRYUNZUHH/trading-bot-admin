@@ -27,7 +27,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   
   useEffect(() => {
     if (!isAuthenticated()) {
-      navigate('/login', { replace: true })
+      window.location.href = '/login'
     }
   }, [navigate])
   
@@ -56,7 +56,7 @@ function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('user')
-    navigate('/login', { replace: true })
+    window.location.href = '/login'
   }
 
   return (
@@ -225,3 +225,4 @@ function App() {
 }
 
 export default App
+
